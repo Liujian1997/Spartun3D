@@ -1,0 +1,108 @@
+defaults:
+  - data: default
+  - task: tuning_sit_qa
+  - llm: vicuna7b
+  - vision2d: convnext
+  - vision3d: ose3d_pointnetpp
+  - _self_
+
+# exp general info
+name: LEO-emi_nav   # project name of wandb
+note: default   # run name of wandb
+rng_seed: 42
+num_gpu: 4  # will be overrided by launch.py
+mode: train
+naming_keywords: [note]   # choose keywords to feature the exp run dir
+base_dir: TBD
+exp_dir: ""   # temporarily empty, will be set by run.py as base_dir + name + *naming_keywords
+#pretrained_ckpt_path: /localscratch/zhan1624/embodied-generalist/TBD/LEO-emi_nav_default/2
+#pretrained_ckpt_path: /egr/research-hlr2/zhan1624/leo_data/align_lora.pth
+#pretrained_ckpt_path: "/egr/research-hlr2/zhan1624/leo_data/sft_noacth"   # specified on launch
+#pretrained_ckpt_path: "/localscratch/zhan1624/embodied-generalist/TBD/LEO-3_default/6"
+#pretrained_ckpt_path: "/localscratch/zhan1624/embodied-generalist/TBD/pre-train/10"
+pretrained_ckpt_path: "/localscratch/zhan1624/embodied-generalist/TBD/LEO-bestnewnew/6"
+#new_best: 6, 13 bestnewnew:6
+#pretrained_ckpt_path: "/localscratch/zhan1624/embodied-generalist/TBD/LEO-3_default/5"
+logger:
+  name: wandb
+  entity: zhangjoslin
+
+dataset_wrapper_args:
+  max_obj_len: 60
+
+dataloader:
+  train:
+    batchsize: 3   # per-gpu batchsize
+    num_workers: 0
+  eval:
+    batchsize:  1  # per-gpu batchsize
+    num_workers: 1
+
+trainer: LeoTrainer
+training:
+  epochs: ${task.training.epochs}
+  gradient_accumulation_steps: 5
+  grad_norm: 5.0
+  optim:
+    name: AdamW
+    args:
+      lr: ${task.training.lr}
+      betas: [0.9, 0.999]
+      weight_decay: 0.05
+  schedule:
+    name: linear_warmup_cosine_decay
+    args:
+      warmup_steps: 400
+
+eval:
+  num_batch_val: 10
+  val_interval: 1
+
+# model misc
+clip_txt_guidance:
+  flag: False   # for eai
+  clip_out_dim: 1024
+
+# inference
+probe:
+  sources: [3Rscan]
+  #scene_ids: [0cac75dc-8d6f-2d13-8d08-9c497bd6acdc]
+  scene_ids: [5341b79f-8a66-2cdd-84d5-6dba6525dd75]
+  # scene_ids: 
+  #      [scene0415_00]
+  # situations: "I have turned on the light. In front of me, there is a rectangular narrow box."
+  # instructions: ["How many objects are mentioned that are used for lighting?",
+  #               "What is the color of the fireplace and what can it be used for?",
+  #               "What object is directly in front of you and what is its shape?",
+  #               "Which object can be used for laying on, holding, sleeping, and carrying, and where is it located?",
+  #               "What is the relative position of the couch to the display case?",
+  #               "What actions can the pillow be used for?",
+  #               "Where is the white fireplace located and what can it be used for?",
+  #               "How many items are mentioned that can be used for storing?",
+  #               "What can the picture be used for and where is it located?",
+  #               "What objects are close to each other on the right side?"]
+  # situations: "I'm laying on a wide sofa.  In front of me, there is a black flat electronic TV that is on."
+  # instructions: ["What color is the TV in front of you, and what is it used for?",
+  #                "How many items are mentioned to the left of you?",
+  #                "What action is the sink behind you used for, and where is it located?",
+  #                "Where is the potted plant located relative to the sink?",
+  #                "What is the stool to the right used for, and where is it located?",
+  #                "What actions can the table to the right be used for, and what is its relative position?",
+  #                "What are the functions of the book behind you, and where is it located?",
+  #                "How many objects are described as being close to the sink?",
+  #                "What color are the blinds, and where are they located?",
+  #                "What actions can the salt to the left be used for?"
+
+  #              ]
+  situations: "You are standing beside sink while there is a towel on your backwards."
+  instructions: ["Offer a detailed interpretation of this scene from your current position."
+  # "What is the object closest to my left?",
+  # "How many chairs are to my left?", "answer",
+  # "What is the color of the monitor to my left?",
+  # "Is the window to my left open or closed?"
+               ]
+  save_obj_tokens: True
+
+
+
+#{"scene_id": "scene0415_00", "situation": "I am standing in the bathtub facing a towel and there is a toilet on my right.", "alternative_situation": ["With my hand on the bar at my left I try to reach the towel in front of me.", "I am bathing in the bathtub behind the shower curtain."], "question": "What object is used to dry yourself on the rack in front of me?", "question_id": 220602001412}
