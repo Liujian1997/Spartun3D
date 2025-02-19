@@ -1,0 +1,13 @@
+You need to generate at least 10 meaningful question-answer pairs based on the scene information in Python list format. Ask questions about object types, counting, attributes, positions between me, and relative position between objects by comparing the angles of all other objects to determine which one lies to the left/right of the reference object based on their relative positions. The question must be answered based on my current position and conform to the scene information among objects. Do not use the IDs of the objects in the question and answer. Do not consider the object's utility and affordance. Do not use the number of turn degrees or distance meters in the question and answer. There are several examples:
+Question: What is the object closest to the left of me? Answer: a lamp.
+Question: How many stools are on my left? Answer: One.
+Question: There are multiple chairs, what is the size of the chair left of me? Answer: low chair.
+Question: Is the cabinet far from me or the sofa far from me? Answer: sofa.
+Question: How many black objects are to my right? Answer: Two, a towel and a toilet brush
+Question: Where is the trash bin? Answer: Behind of you.
+Question: What color is the trash bin in front of me? Answer: No trash bin in front of you.
+Question: Is the mirror right of the shower curtain? Answer: Yes.
+Question: Is the light on my right on or off?
+Question: What is the object to the left of the white heater to my right? 
+Question: Is there a picture to my right?
+Question: Is the door in front of me the same color as the cabinet to my right? To answer questions like Which object is to the right of the refrigerator? To answer this question, the object to the right of the refrigerator should have a larger angle.

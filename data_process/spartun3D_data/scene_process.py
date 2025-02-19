@@ -6,10 +6,10 @@ import random
 import math
 from tqdm import tqdm
 
-obj_file = "/home/yue/projects/embodied-generalist/scans/3DSSG/objects.json"
-relationship_file = "/home/yue/projects/embodied-generalist/scans/3DSSG/relationships.json"
-rscan_base = "/home/yue/data/leo_data/3RScan-base"
-write_path = "/home/yue/projects/embodied-generalist/data_process/3Rscan/situated_meta/"
+obj_file = "scans/3DSSG/objects.json"
+relationship_file = "scans/3DSSG/relationships.json"
+rscan_base = "leo_data/3RScan-base"
+write_path = "data_process/3Rscan/situated_meta/"
 
 #stop_object = ["otherstructure", "otherfurniture", "otherprop", "ceiling", "wall", "floor", "object"]
 stop_object = ["ceiling", "wall", "floor", "object"]
@@ -345,8 +345,6 @@ for item in tqdm(relation_data['scans']):
         block_list = []
         for id, obj in new_dict.items():
             label_name = inst_to_label[int(id)]
-            # if id == "4":
-            #     print('yue')
             if label_name in stop_object or int(id) == refer_obj:
                     continue
             key = label_name+"_"+id
@@ -409,7 +407,6 @@ for item in tqdm(relation_data['scans']):
     # del final_obj[key_id]['up']
     #with open(write_path+"/"+scan_id+".json", "w") as f_out:
         #json.dump(final_obj, f_out)
-        # print('yue')
    
 
     
