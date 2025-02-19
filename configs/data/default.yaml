@@ -71,14 +71,14 @@ rscan_dialog:
 
 sitrscan_cap:
   rscan_base: ${data.rscan_base}
-  anno_dir: "/localscratch/zhan1624/embodied-generalist/yue_data/yuecaption.json"
+  anno_dir: "spartun3D_data/caption/"
   max_obj_len: ${data.max_obj_len}
   num_points: ${data.num_points}
 
 
 sitrscan_qa:
   rscan_base: ${data.rscan_base}
-  anno_dir: "/localscratch/zhan1624/embodied-generalist/data_process/yue_data/obj_data/"
+  anno_dir: "data_process/spartun3D_data/obj_data/"
   max_obj_len: ${data.max_obj_len}
   num_points: ${data.num_points}
   pc_type: gt
