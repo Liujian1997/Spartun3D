@@ -1957,7 +1957,7 @@ class Spartun3RScanSitCap(LeoBase):
         scan_caps = []
         scan_situation = []   # relevant instances
         #anno_file = os.path.join(anno_dir, f'3rscan_scenecap_{self.split}.json')
-        anno_file = f"/localscratch/zhan1624/embodied-generalist/data_process/yue_data/yuesitcap_{self.split}.json"
+        anno_file = f"data_process/spartun3D_data/caption/sitcap_{self.split}.json"
 
         with open(anno_file, 'r', encoding='utf-8') as f:
             anno_data = json.load(f)
@@ -2093,10 +2093,10 @@ class Spartun3RScanSitQA(LeoBase):
         else:
             self.pc_type = getattr(cfg.data.sitrscan_qa, 'pc_type', 'gt')
         
-        logger.info(f"Loading Spartun3DSit3D {split}-set language")
+        logger.info(f"Loading Spartun3DSitQA {split}-set language")
         self.scan_ids, self.lang_data, self.sqa_insts = self.load_anno(cfg.data.sitrscan_qa.anno_dir)
         # scan_ids may be repeatitive
-        logger.info(f"Finish loading Spartun3DSit3D {split}-set language, collected {len(self.scan_ids)} data")
+        logger.info(f"Finish loading Spartun3DSitQA {split}-set language, collected {len(self.scan_ids)} data")
 
         self.scan_data = {}
 
@@ -2107,28 +2107,21 @@ class Spartun3RScanSitQA(LeoBase):
 
 
         anno_file = os.path.join(anno_dir, "obj_%s.json"%self.split)
-        anno_can_file = f"data_process/yue_data/can_data/version2/afford_can_{self.split}.json"
+        anno_can_file = f"data_process/spartun3D_data/can_data/afford_can_{self.split}.json"
        
         anno_data = {}
         with open(anno_file, 'r', encoding='utf-8') as f_ob:
             anno_data.update(json.load(f_ob))
-        # with open(anno_can_file, 'r', encoding='utf-8') as f_can:
-        #     can_anno_data = json.load(f_can)
-        #     for key, value in can_anno_data.items():
-        #         if key in anno_data:
-        #             anno_data[key]['qa'] += value['qa']
-        #         else:
-        #             anno_data[key] = value
-        
-        with open("/localscratch/zhan1624/embodied-generalist/TBD/LEO-1_vt/output-our.json") as f_in:
-            filter_data = json.load(f_in)
+        with open(anno_can_file, 'r', encoding='utf-8') as f_can:
+            can_anno_data = json.load(f_can)
+            for key, value in can_anno_data.items():
+                if key in anno_data:
+                    anno_data[key]['qa'] += value['qa']
+                else:
+                    anno_data[key] = value
 
         count = 0 
         for item_key, item_value in anno_data.items():
-            # if item_key in filter_data:
-            #     continue
-            # if count == 10:
-            #     break
             item_scan, item_objid = item_key.split("_")
             connect_key = item_value['query']
             insts = [s for s in connect_key.values()]
@@ -2142,8 +2135,6 @@ class Spartun3RScanSitQA(LeoBase):
 
             for qa_id, qa in enumerate(item_value['qa']):
                 if not qa[2].endswith("."):
-                    continue
-                if item_key+"_"+str(qa_id) in filter_data:
                     continue
                 
                 scan_ids.append(item_key+"_"+str(qa_id))
