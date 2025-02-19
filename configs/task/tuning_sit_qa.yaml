@@ -6,8 +6,8 @@ training:
 leomix:
   mode: [train]
   dataset: LeoMix
-  #mix: [sitrscan_cap, sitrscan_qa, sitrscan_afford, sitrscan_planning]
-  mix: [cliport]
+  mix: [sitrscan_qa, sitrscan_cap, rscan_qa, scene_cap]
+  #mix: [cliport]
   ratio: 1.0
   dataset_wrapper: LeoObjPadDatasetWrapper
   dataset_wrapper_args: ${dataset_wrapper_args}
@@ -15,15 +15,9 @@ leomix:
   eval_dataloader_args: ${dataloader.eval}
 
 #mix: [sitrscan_qa, sitrscan_cap, rscan_qa, scene_cap]
-#sitrscan_qa, sitrscan_cap, sqa3d, scan2cap, scanqa, rscan_qa, rscan_plan, rscan_dialog
+# [sitrscan_cap, sitrscan_qa, sitrscan_afford, sitrscan_planning]
+
 # eval
-# cap3d:
-#   mode: [test]
-#   dataset: LeoCap3D
-#   dataset_wrapper: LeoObjPadDatasetWrapper
-#   dataset_wrapper_args: ${dataset_wrapper_args}
-#   eval_dataloader_args: ${dataloader.eval}
-#   evaluator: CaptionEvaluator
 
 # scene_cap:
 #   mode: [test]
@@ -57,33 +51,11 @@ leomix:
 #   eval_dataloader_args: ${dataloader.eval}
 #   evaluator: SQA3DEvaluator
 
-# rscan_qa:
-#   mode: [test]
-#   dataset: Leo3RScanQA
-#   dataset_wrapper: LeoObjPadDatasetWrapper
-#   dataset_wrapper_args: ${dataset_wrapper_args}
-#   eval_dataloader_args: ${dataloader.eval}
-#   evaluator: ScanQAEvaluator
 
-# rscan_plan:
-#   mode: [val, test]
-#   dataset: Leo3RScanPlan
-#   dataset_wrapper: LeoObjPadDatasetWrapper
-#   dataset_wrapper_args: ${dataset_wrapper_args}
-#   eval_dataloader_args: ${dataloader.eval}
-#   evaluator: CaptionEvaluator
-
-# rscan_dialog:
-#   mode: [val, test]
-#   dataset: Leo3RScanDialog
-#   dataset_wrapper: LeoObjPadDatasetWrapper
-#   dataset_wrapper_args: ${dataset_wrapper_args}
-#   eval_dataloader_args: ${dataloader.eval}
-#   evaluator: CaptionEvaluator
 
 # sitrscan_qa:
 #   mode: [val,test]
-#   dataset: Yue3RScanSitQA
+#   dataset: Spartun3RScanSitQA
 #   dataset_wrapper: LeoObjPadDatasetWrapper
 #   dataset_wrapper_args: ${dataset_wrapper_args}
 #   eval_dataloader_args: ${dataloader.eval}
@@ -93,7 +65,7 @@ leomix:
 
 # sitrscan_afford:
 #   mode: [val]
-#   dataset: Yue3RScanAfford
+#   dataset: Spartun3RScanAfford
 #   dataset_wrapper: LeoObjPadDatasetWrapper
 #   dataset_wrapper_args: ${dataset_wrapper_args}
 #   eval_dataloader_args: ${dataloader.eval}
@@ -101,20 +73,20 @@ leomix:
 
 # sitrscan_planning:
 #   mode: [val]
-#   dataset: Yue3RScanPlanning
+#   dataset: Spartun3RScanPlanning
 #   dataset_wrapper: LeoObjPadDatasetWrapper
 #   dataset_wrapper_args: ${dataset_wrapper_args}
 #   eval_dataloader_args: ${dataloader.eval}
 #   evaluator: CaptionEvaluator
 
 
-# sitrscan_cap:
-#   mode: [val]
-#   dataset: Yue3RScanSitCap
-#   dataset_wrapper: LeoObjPadDatasetWrapper
-#   dataset_wrapper_args: ${dataset_wrapper_args}
-#   eval_dataloader_args: ${dataloader.eval}
-#   evaluator: CaptionEvaluator
+sitrscan_cap:
+  mode: [val]
+  dataset: Spartun3RScanSitCap
+  dataset_wrapper: LeoObjPadDatasetWrapper
+  dataset_wrapper_args: ${dataset_wrapper_args}
+  eval_dataloader_args: ${dataloader.eval}
+  evaluator: CaptionEvaluator
 
 # mp3d_objnav:
 #   mode: [val]   # offline test
@@ -124,10 +96,3 @@ leomix:
 #   eval_dataloader_args: ${dataloader.eval}
 #   evaluator: ObjNavEvaluator
 
-cliport:
-  mode: [val]   # offline test
-  dataset: LeoCLIPort
-  dataset_wrapper: LeoObjPadDatasetWrapper
-  dataset_wrapper_args: ${dataset_wrapper_args}
-  eval_dataloader_args: ${dataloader.eval}
-  evaluator: CLIPortEvaluator

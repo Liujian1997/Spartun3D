@@ -15,14 +15,7 @@ mode: train
 naming_keywords: [note]   # choose keywords to feature the exp run dir
 base_dir: TBD
 exp_dir: ""   # temporarily empty, will be set by run.py as base_dir + name + *naming_keywords
-#pretrained_ckpt_path: /localscratch/zhan1624/embodied-generalist/TBD/LEO-emi_nav_default/2
-#pretrained_ckpt_path: /egr/research-hlr2/zhan1624/leo_data/align_lora.pth
-#pretrained_ckpt_path: "/egr/research-hlr2/zhan1624/leo_data/sft_noacth"   # specified on launch
-#pretrained_ckpt_path: "/localscratch/zhan1624/embodied-generalist/TBD/LEO-3_default/6"
-#pretrained_ckpt_path: "/localscratch/zhan1624/embodied-generalist/TBD/pre-train/10"
-pretrained_ckpt_path: "/localscratch/zhan1624/embodied-generalist/TBD/LEO-bestnewnew/6"
-#new_best: 6, 13 bestnewnew:6
-#pretrained_ckpt_path: "/localscratch/zhan1624/embodied-generalist/TBD/LEO-3_default/5"
+pretrained_ckpt_path: "/localscratch/zhan1624/embodied-generalist/TBD/LEO-bestnewnew/best/"
 logger:
   name: wandb
   entity: zhangjoslin
