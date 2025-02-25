@@ -14,7 +14,7 @@ ICLR 2025
 git clone https://github.com/zhangyuejoslin/Spartun3D.git
 cd Spartun3D
 ```
-2. Following [LEO](https://github.com/embodied-generalist/embodied-generalist/blob/main/README.md?plain=1) to create a conda environment and install third-party libraries (for point cloud backbones).
+2. Following [LEO](https://github.com/embodied-generalist/embodied-generalist/blob/main/README.md?plain=1) to create a conda environment and install third-party libraries for point cloud backbones.
 
 ## Generating Data for Spartun3D
 
