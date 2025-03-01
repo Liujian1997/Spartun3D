@@ -15,7 +15,7 @@ mode: train
 naming_keywords: [note]   # choose keywords to feature the exp run dir
 base_dir: TBD
 exp_dir: ""   # temporarily empty, will be set by run.py as base_dir + name + *naming_keywords
-pretrained_ckpt_path: "LEO-bestnewnew/best/"
+pretrained_ckpt_path: ""
 logger:
   name: wandb
   entity: zhangjoslin
