@@ -5,6 +5,10 @@
 <!-- <h3 align="center">
 ICLR 2025
 </h3> -->
+<div align="center">
+    <a href="https://arxiv.org/pdf/2410.03878" target="_blank">
+    <img src="https://img.shields.io/badge/Paper-arXiv-deepgreen" alt="Paper arXiv"></a>
+</div>
 
 ![overview](spartun3D.gif)
 
