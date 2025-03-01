@@ -201,8 +201,8 @@ class LeoTrainer():
         logger.info(f"Start validation epoch {epoch+1}")
         self.model.eval()
         for task_name in self.evaluators.keys():
-            if task_name in self.data_loaders['val']:
-                loader = self.data_loaders['val'][task_name]
+            if task_name in self.data_loaders['test']:
+                loader = self.data_loaders['test'][task_name]
                 pbar = trange(len(loader), disable=(not self.accelerator.is_main_process))
                 for i, data_dict in enumerate(loader):
                     if i >= self.num_batch_val:
