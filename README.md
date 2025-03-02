@@ -40,7 +40,7 @@ cd Spartun3D
 
  **python launch**
 ```bash
-python launch.py --mode python --config configs/default.yaml <HYDRA_CONFIG>
+python launch.py --mode python --config configs/default.yaml
 ```
 
  **accelerate launch**
