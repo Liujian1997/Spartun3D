@@ -11,6 +11,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, LlamaForCausalLM, 
 
 from model.build import build_module
 from model.utils import disabled_train, maybe_autocast
+from datetime import datetime
 
 logger = get_logger(__name__)
 
@@ -32,15 +33,15 @@ class LeoAgent(nn.Module):
                 cfg.llm.cfg_path, truncation_side=cfg.llm.truncation_side
             )
             self.llm_model = AutoModelForCausalLM.from_pretrained(cfg.llm.cfg_path, torch_dtype=torch.float16)
-        
+
         logger.info(f"Build {cfg.llm.name} from {cfg.llm.cfg_path}")
-        
+
         for param in self.llm_model.parameters():
             param.requires_grad = False
         self.llm_model.eval()
         self.llm_model.train = disabled_train
         logger.info("Freeze LLM")
-        
+
         # 2D vision
         self.img_encoder = build_module(cfg.vision2d)
         self.img_proj = nn.Linear(
@@ -73,6 +74,8 @@ class LeoAgent(nn.Module):
         self.max_context_len = cfg.llm.max_context_len
         self.max_out_len = cfg.llm.max_out_len
 
+        self.mseloss = nn.MSELoss(reduction='none')
+        
         # additional text x multi-modal tokens fusion
         self.clip_txt_guidance = cfg.clip_txt_guidance.flag
         if self.clip_txt_guidance:
@@ -83,6 +86,17 @@ class LeoAgent(nn.Module):
             self.clip_model.eval()
             self.clip_model.train = disabled_train
             self.clip_proj = nn.Linear(cfg.clip_txt_guidance.clip_out_dim, self.llm_model.config.hidden_size)
+
+        self.clip_txt_align = cfg.clip_txt_align.flag
+        if self.clip_txt_align:
+            logger.info("Add CLIP semantics guidance")
+            self.clip_model = clip.load('RN50')[0]
+            for param in self.clip_model.parameters():
+                param.requires_grad = False
+            self.clip_model.eval()
+            self.clip_model.train = disabled_train
+            self.clip_align_proj = nn.Linear(cfg.clip_txt_guidance.clip_out_dim, 256)
+            self.txt_dim = cfg.clip_txt_align.clip_out_dim
 
     @property
     def device(self):
@@ -256,6 +270,27 @@ class LeoAgent(nn.Module):
         if 'obj_tokens' not in data_dict:
             # obtain obj tokens
             data_dict = self.pcd_encoder(data_dict)
+            if self.clip_txt_align:
+                with torch.no_grad():
+                    txt_fts = torch.zeros(bs, 60, self.txt_dim).to(torch.float32).to(device)
+                    for i in range(bs):
+                        if self.clip_txt_align:        
+                            tmp_fts = self.clip_model.encode_text(
+                                clip.tokenize(data_dict['obj_text'][i], truncate=True).to(device)
+                            )
+                        elif self.bert_txt_align:
+                            tmp_fts = torch.tensor(self.bert_model.encode(data_dict['obj_text'][i])).to(device)
+                        
+                        if tmp_fts.shape[0]>60:
+                            txt_fts[i] = tmp_fts[:60] 
+                        else:
+                            txt_fts[i, :tmp_fts.shape[0],:] = tmp_fts
+                data_dict['obj_txt_emb'] = self.clip_align_proj(txt_fts)
+                #data_dict['obj_tokens'][:,1:,:] = data_dict['obj_txt_emb']
+                loss_hidden = self.mseloss(data_dict['obj_txt_emb'], data_dict['obj_tokens'][:,1:,:])
+                tmp_mask = data_dict['obj_masks'][:,1:].unsqueeze(-1)
+                loss_hidden = (loss_hidden*tmp_mask).sum()/tmp_mask.sum()
+             
 
         data_dict['obj_tokens'] = self.pcd_proj(data_dict['obj_tokens'].to(device))
         # data_dict['obj_tokens'] = data_dict['obj_tokens'] + self.pcd_type_embed
@@ -313,6 +348,8 @@ class LeoAgent(nn.Module):
         loss = rearrange(loss, '(b t) -> b t', b=bs)
         loss = loss.sum(1) / num_tokens_for_loss   # (B,)
 
+        if self.clip_txt_align:
+            loss += loss_hidden*0.01
         data_dict.update({'loss': loss})
         # do not average loss, average txt and eai respectively in Trainer.train_step() instead
         return data_dict

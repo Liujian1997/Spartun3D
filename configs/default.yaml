@@ -18,7 +18,7 @@ exp_dir: ""   # temporarily empty, will be set by run.py as base_dir + name + *n
 pretrained_ckpt_path: ""
 logger:
   name: wandb
-  entity: zhangjoslin
+  entity: ""
 
 dataset_wrapper_args:
   max_obj_len: 60
@@ -53,6 +53,10 @@ eval:
 
 # model misc
 clip_txt_guidance:
+  flag: False   # for eai
+  clip_out_dim: 1024
+
+clip_txt_align:
   flag: False   # for eai
   clip_out_dim: 1024
 
