@@ -47,6 +47,8 @@ python launch.py --mode python --config configs/default.yaml
 ```bash
 python launch.py --mode accelerate --config configs/default.yaml
 ```
- **SQA3D Eval**
+ **Eval Checkpoint**
  
-[sqa3d checkpoint](https://drive.google.com/drive/folders/1Q27w0K3NVrqLS4GKonYLMMN8e1j_raXD?usp=sharing)
+[situated caption](https://drive.google.com/file/d/1siQA_taoiU8rYhMnq1wa9unPFMubHC3a/view?usp=drive_link)
+
+[SQA3d eval](https://drive.google.com/drive/folders/1Q27w0K3NVrqLS4GKonYLMMN8e1j_raXD?usp=sharing)
