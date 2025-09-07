@@ -8,8 +8,8 @@ from tqdm import tqdm
 
 obj_file = "3DSSG/objects.json"
 relationship_file = "3DSSG/relationships.json"
-rscan_base = "leo_data/3RScan-base"
-write_path = "3Rscan/situated_meta/"
+rscan_base = "/data2/liujian/leo_data/scan_data/3RScan-base"
+write_path = "/data2/liujian/leo_data/scan_data/3RScan-base/3Rscan/situated_meta/"
 
 
 stop_object = ["ceiling", "wall", "floor", "object"]
@@ -229,10 +229,10 @@ random.seed(10)
 res_dict = {}
 for item in tqdm(relation_data['scans']):
     scan_id = item['scan']
-    # if scan_id in specific_key or scan_id+".json" in used_key:
-    #     continue
-    if scan_id != "137a8158-1db5-2cc0-8003-31c12610471e":
+    if scan_id in specific_key or scan_id+".json" in used_key:
         continue
+    # if scan_id != "137a8158-1db5-2cc0-8003-31c12610471e":
+    #     continue
 
     scan_path = os.path.join(rscan_base, '3RScan-ours-align', scan_id)
     pcd_data = torch.load(os.path.join(scan_path, 'pcd-align.pth'))

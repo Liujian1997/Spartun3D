@@ -1,8 +1,8 @@
-scan_family_base: /egr/research-hlr2/zhan1624/leo_data/scannet
-rscan_base: /egr/research-hlr2/zhan1624/leo_data/3RScan-base
+scan_family_base: /data2/liujian/leo_data/scan_data/scannet
+rscan_base: /data2/liujian/leo_data/scan_data/3RScan-base
 
-alignment_base: /egr/research-hlr2/zhan1624/leo_data/annotations/alignment
-instruction_base: /egr/research-hlr2/zhan1624/leo_data/annotations/instruction
+alignment_base: /data2/liujian/leo_data/annotations/alignment
+instruction_base: /data2/liujian/leo_data/annotations/instruction
 #/egr/research-hlr2/zhan1624/leo_data/annotations/instruction
 
 #/egr/research-hlr2/zhan1624/leo_data/annotations/instruction/eai_data_example/cliport/leo-manip/put-block-in-bowl-seen-colors-train/
